@@ -1,0 +1,48 @@
+@model List<Auction>
+
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Current Auctions";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Seller</th>
+            <th>Top Bid</th>
+            <th>Time Remaining &#x25BC;</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(Auction a in @Model)
+        {
+            <tr>
+                <td><a asp-controller="Auctions" asp-action="GetAuction" asp-route-auctionId="@a.AuctionId">@a.ProductName</a></td>
+                <td>@a.Owner.FirstName</td>
+                <td>@String.Format("{0:C2}", @a.TopBidAmount)</td>
+                <td>@a.RemainingTimeString</td>
+                <td>
+                    @if(a.OwnerId == @UserManager.GetUserId(User))
+                    {
+                        <a asp-controller="Auctions" asp-action="DeleteAuction" asp-route-auctionId="@a.AuctionId">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
+                       
+    </tbody>
+</table>
+
+<div class="row">
+    <a asp-area="" asp-controller="Auctions" asp-action="Create" class="btn btn-primary">New Auction</a>
+    <div >Your Current Wallet: @String.Format("{0:C2}", @ViewBag.User.Wallet.Amount)</div>
+</div>
+
+
+

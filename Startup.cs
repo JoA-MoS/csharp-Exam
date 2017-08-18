@@ -79,6 +79,7 @@ namespace Exam
 
                 // User settings
                 options.User.RequireUniqueEmail = true;
+
             });
 
             // services.AddAuthorization(options =>

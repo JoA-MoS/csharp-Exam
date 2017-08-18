@@ -8,9 +8,10 @@ using Exam.Data;
 namespace Exam.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170818191650_WinningBidOnAuction")]
+    partial class WinningBidOnAuction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2");
@@ -92,7 +93,7 @@ namespace Exam.Migrations
 
                     b.Property<decimal>("StartingBid");
 
-                    b.Property<int?>("WinningBidId");
+                    b.Property<int>("WinningBidId");
 
                     b.HasKey("AuctionId");
 

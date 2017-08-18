@@ -15,8 +15,9 @@ namespace Exam.Data
         {
         }
 
-        // public DbSet<Sample> Samples { get; set; }
-
+        public DbSet<Auction> Auctions { get; set; }
+        public DbSet<Wallet> Wallets { get; set; }
+        public DbSet<Bid> Bids { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

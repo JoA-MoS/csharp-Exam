@@ -8,9 +8,10 @@ using Exam.Data;
 namespace Exam.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170818164821_AuctionModels")]
+    partial class AuctionModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2");
@@ -92,8 +93,6 @@ namespace Exam.Migrations
 
                     b.Property<decimal>("StartingBid");
 
-                    b.Property<int?>("WinningBidId");
-
                     b.HasKey("AuctionId");
 
                     b.HasIndex("CreatedById");
@@ -142,7 +141,7 @@ namespace Exam.Migrations
                     b.Property<int>("WalletId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<decimal>("Amount");
+                    b.Property<decimal>("Ammount");
 
                     b.Property<DateTime>("Created");
 
@@ -291,7 +290,7 @@ namespace Exam.Migrations
             modelBuilder.Entity("Exam.Models.Bid", b =>
                 {
                     b.HasOne("Exam.Models.Auction", "Auction")
-                        .WithMany("Bids")
+                        .WithMany()
                         .HasForeignKey("AuctionId")
                         .OnDelete(DeleteBehavior.Cascade);
 

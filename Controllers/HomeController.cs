@@ -12,8 +12,8 @@ namespace Exam.Controllers
     {
         public IActionResult Index()
         {
-            return View();
-            // return RedirectToAction("Dashboard", "Weddings");
+            //return View();
+            return RedirectToAction("Dashboard", "Auctions");
 
         }
 

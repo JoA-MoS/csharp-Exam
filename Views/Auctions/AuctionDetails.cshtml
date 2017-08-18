@@ -1,0 +1,53 @@
+@model CreateBidViewModel
+@{
+    ViewData["Title"] = @ViewBag.Auction.ProductName;
+}
+
+<h2>@ViewData["Title"]</h2>
+<h3>Created by: @ViewBag.Auction.Owner.FirstName</h3>
+<h3>Time Remaing: @ViewBag.Auction.RemainingTimeString</h3>
+<p>@ViewBag.Auction.Description</p>
+<h3>Current Highest Bid:</h3>
+<p>@String.Format("{0:C2}", @ViewBag.Auction.TopBidAmount)</p>
+<h3> 
+    @if(@ViewBag.Auction.TopBidder!=null)
+    {
+        <span>By: @ViewBag.Auction.TopBidder.FirstName</span>
+    }
+    else
+    {
+        <span>No Bids Yet</span>
+    }
+</h3>
+
+@if(!@ViewBag.Auction.Closed)
+{
+<form asp-controller="Auctions" asp-action="CreateBid" asp-route-auctionId="@ViewBag.Auction.AuctionId"  method="post" class="form-horizontal">
+    <hr />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Amount" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Amount" class="form-control" />
+            <span asp-validation-for="Amount" class="text-danger"></span>
+        </div>
+    </div>
+  
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-default">Bid!!</button>
+        </div>
+    </div>
+</form>
+}
+else
+{
+    <h3>Auction has ended</h3>
+}
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
+
+
+
+

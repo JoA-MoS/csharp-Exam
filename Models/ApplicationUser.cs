@@ -14,15 +14,20 @@ namespace Exam.Models
 
         public string LastName { get; set; }
 
+        [InverseProperty("Owner")]
+        public Wallet Wallet { get; set; } = new Wallet();
+
         [NotMapped]
         public string FullName
         {
             get { return FirstName + " " + LastName; }
         }
 
-        // [InverseProperty("Guest")]
-        // public virtual List<WeddingGuest> WeddingGuestConrimations { get; set; } = new List<WeddingGuest>();
-        // public virtual List<Comment> Comments { get; set; } = new List<Comment>();
+        [InverseProperty("Owner")]
+        public virtual List<Auction> Auctions { get; set; } = new List<Auction>();
+
+        [InverseProperty("Owner")]
+        public virtual List<Bid> Bids { get; set; } = new List<Bid>();
 
 
     }
