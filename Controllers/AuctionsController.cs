@@ -12,7 +12,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Exam.Controllers
 {
-
     [Authorize]
     [Route("auctions")]
     public class AuctionsController : Controller
@@ -52,9 +51,6 @@ namespace Exam.Controllers
                 }
                 _context.SaveChanges();
             }
-
-
-
         }
 
         [HttpGet("dashboard")]
@@ -83,7 +79,6 @@ namespace Exam.Controllers
                                                             .First();
 
             ViewBag.Auction = auction;
-
             return View("AuctionDetails");
 
         }
@@ -125,7 +120,6 @@ namespace Exam.Controllers
 
 
         [HttpGet("{auctionId:int}/delete")]
-        // [Authorize(Policy = "Over21")]
         public IActionResult DeleteAuction(int auctionId)
         {
             // quick validatin check 
@@ -133,7 +127,6 @@ namespace Exam.Controllers
             {
                 var userId = _userManager.GetUserId(User);
                 Auction auction = _context.Auctions.Where(w => w.AuctionId == auctionId && w.OwnerId == userId).First();
-
                 if (auction != null)
                 {
                     _context.Auctions.Remove(auction);
@@ -144,16 +137,12 @@ namespace Exam.Controllers
                     // this if probably isnt needed
                     return View("AccessDenied");
                 }
-
-
                 return RedirectToAction("Dashboard");
             }
             catch
             {
                 return View("AccessDenied");
             }
-
-
         }
 
         [HttpPost("{auctionId:int}/bids")]
@@ -208,13 +197,7 @@ namespace Exam.Controllers
                     return View("AuctionDetails", model);
                 }
             }
-
-
             return RedirectToAction("Dashboard");
-
         }
-
-
     }
-
 }
