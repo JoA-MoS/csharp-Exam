@@ -34,10 +34,12 @@ namespace Exam.Controllers
         {
             // This would be a great candate for some sort of event that fires when the remaining time == 0 
             // but no time for that
-            List<Auction> auctions = _context.Auctions.Where(a => a.Closed && a.WinningBidId == null)
+            List<Auction> auctions = _context.Auctions.Where(a => a.Closed && a.WinningBidId == null || a.WinningBidId == 0)
                                         .Include(a => a.Bids)
                                             .ThenInclude(b => b.Owner)
                                                 .ThenInclude(o => o.Wallet)
+                                        .Include(a => a.Owner)
+                                            .ThenInclude(ao => ao.Wallet)
                                         .ToList();
 
             foreach (Auction a in auctions)
@@ -45,7 +47,8 @@ namespace Exam.Controllers
                 if (a.Bids.Count > 0)
                 {
                     a.WinningBidId = a.TopBid.BidId;
-                    a.TopBid.Owner.Wallet.Amount -= a.TopBid.Amount;
+                    a.TopBid.Owner.Wallet.Amount -= a.TopBidAmount;
+                    a.Owner.Wallet.Amount += a.TopBidAmount;
                 }
                 _context.SaveChanges();
             }
@@ -158,13 +161,27 @@ namespace Exam.Controllers
         {
             var userId = _userManager.GetUserId(User);
             Auction auction = _context.Auctions.Where(a => a.AuctionId == auctionId)
-                                                            .Include(a => a.Bids)
-                                                            .First();
+                                                    .Include(a => a.Owner)
+                                                    .Include(a => a.Bids)
+                                                        .ThenInclude(b => b.Owner)
+                                                    .First();
+
+            ApplicationUser user = _context.Users.Where(u => u.Id == userId)
+                                        .Include(u => u.Wallet)
+                                        .First();
 
             // Validate bid greater then other bids
             if (auction != null)
             {
-                if (model.Amount > auction.TopBidAmount)
+                if (model.Amount <= auction.TopBidAmount)
+                {
+                    ModelState.AddModelError("Amount", "Amount must be greater than the current top bid");
+                }
+                if (model.Amount > user.Wallet.Amount)
+                {
+                    ModelState.AddModelError("Amount", "You can't bid more than you have");
+                }
+                if (ModelState.IsValid)
                 {
                     auction.Bids.Add(new Bid
                     {
@@ -178,7 +195,9 @@ namespace Exam.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("Amount", "Amount must be greate than the current top bid");
+                    ViewBag.Auction = auction;
+                    // dont like this because of the address change but
+                    return View("AuctionDetails", model);
                 }
             }
 
