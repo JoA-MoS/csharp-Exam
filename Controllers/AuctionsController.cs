@@ -181,6 +181,14 @@ namespace Exam.Controllers
                 {
                     ModelState.AddModelError("Amount", "You can't bid more than you have");
                 }
+                if (model.Amount <= auction.StartingBid)
+                {
+                    ModelState.AddModelError("Amount", "You must bid more than the starting bid");
+                }
+                if (auction.Closed)
+                {
+                    ModelState.AddModelError("Amount", "You can only bid on auctions that have not ended");
+                }
                 if (ModelState.IsValid)
                 {
                     auction.Bids.Add(new Bid
