@@ -39,10 +39,19 @@
     </tbody>
 </table>
 
-<div class="row">
-    <a asp-area="" asp-controller="Auctions" asp-action="Create" class="btn btn-primary">New Auction</a>
-    <h2><div >Your Current Wallet: @String.Format("{0:C2}", @ViewBag.User.Wallet.Amount)</div></h2>
+<div class="row vertical-align">
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <a asp-area="" asp-controller="Auctions" asp-action="Create" class="btn btn-primary">New Auction</a>
+     </div>
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 right-text-align">
+       <strong> Current Wallet: @String.Format("{0:C2}", @ViewBag.User.Wallet.Amount)</strong>
+    </div>
+
+   
 </div>
+
+
+
 
 
 
